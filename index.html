@@ -7,12 +7,17 @@
     body {
         margin: 0;
         height: 100vh;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+
+    #mainScreen {
+        height: 100vh;
         display: flex;
         justify-content: center;
         align-items: center;
         background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-        font-family: Arial, sans-serif;
-        text-align: center;
     }
 
     .card {
@@ -24,7 +29,7 @@
 
     h1 {
         color: #e91e63;
-        margin-bottom: 30px;
+        margin-bottom: 20px;
     }
 
     .buttons {
@@ -39,7 +44,6 @@
         border-radius: 10px;
         cursor: pointer;
         margin: 10px;
-        transition: 0.3s;
     }
 
     #yesBtn {
@@ -52,35 +56,145 @@
         position: absolute;
     }
 
-    #message {
-        font-size: 24px;
-        color: #e91e63;
-        margin-top: 20px;
+    /* Secret screen */
+    #secretScreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #ff4d6d, #ff8fa3);
         display: none;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        color: white;
+        padding: 20px;
+    }
+
+    #secretText {
+        font-size: 42px;
+        margin-bottom: 20px;
+    }
+
+    #slideshow {
+        width: 250px;
+        height: 350px;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    #slideshow img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* Love letter */
+    #loveLetter {
+        max-width: 500px;
+        margin-top: 25px;
+        font-size: 18px;
+        line-height: 1.6;
+        display: none;
+        animation: fadeIn 3s;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .heart {
+        position: absolute;
+        bottom: -50px;
+        font-size: 24px;
+        color: #ff4d6d;
+        animation: floatUp 6s linear infinite;
+        font-weight: bold;
+    }
+
+    @keyframes floatUp {
+        from {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+        to {
+            transform: translateY(-110vh) scale(1.5);
+            opacity: 0;
+        }
     }
 </style>
 </head>
 <body>
 
-<div class="card">
-    <h1>Pallavi, will you be my Valentine? ❤️</h1>
-    <div class="buttons">
-        <button id="yesBtn" onclick="showLove()">Yes</button>
-        <button id="noBtn" onmouseover="moveNo()">No</button>
+<div id="mainScreen">
+    <div class="card">
+        <h1>Pallavi, will you be my Valentine? ❤️</h1>
+        <div class="buttons">
+            <button id="yesBtn" onclick="showLove()">Yes</button>
+            <button id="noBtn" onmouseover="moveNo()">No</button>
+        </div>
     </div>
-    <div id="message">Yay! I love you ❤️</div>
 </div>
 
-<!-- Background music -->
+<div id="secretScreen">
+    <div id="secretText">I love you Pallavi ❤️</div>
+
+    <div id="slideshow">
+        <img id="slide" src="photo1.jpg">
+    </div>
+
+    <div id="loveLetter">
+        My dearest Pallavi,  
+        <br><br>
+        Every moment with you feels like a beautiful dream.  
+        Your smile brightens my darkest days,  
+        and your presence makes everything in life feel complete.  
+        <br><br>
+        I’m grateful for every laugh, every memory,  
+        and every second I get to spend with you.  
+        <br><br>
+        I love you more than words can ever express.  
+        <br><br>
+        Forever yours,  
+        <br>
+        <b>YourName ❤️</b>
+    </div>
+</div>
+
 <audio id="loveSong" loop>
     <source src="song.mp3" type="audio/mpeg">
 </audio>
 
 <script>
+const coupleText = "Pallavi ❤️ YourName"; // replace YourName
+const photos = ["photo1.jpg", "photo2.jpg", "photo3.jpg"];
+let current = 0;
+
 function showLove() {
-    document.getElementById("message").style.display = "block";
-    const music = document.getElementById("loveSong");
-    music.play().catch(() => {});
+    document.getElementById("loveSong").play().catch(() => {});
+    startHearts();
+
+    setTimeout(() => {
+        document.getElementById("mainScreen").style.display = "none";
+        document.getElementById("secretScreen").style.display = "flex";
+        startSlideshow();
+
+        // Show love letter after 8 seconds
+        setTimeout(() => {
+            document.getElementById("loveLetter").style.display = "block";
+        }, 8000);
+
+    }, 3000);
+}
+
+function startSlideshow() {
+    setInterval(() => {
+        current = (current + 1) % photos.length;
+        document.getElementById("slide").src = photos[current];
+    }, 2500);
 }
 
 function moveNo() {
@@ -95,6 +209,25 @@ function moveNo() {
 
     noBtn.style.left = randomX + "px";
     noBtn.style.top = randomY + "px";
+}
+
+function startHearts() {
+    setInterval(() => {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+
+        const options = ["❤️", "Pallavi", coupleText];
+        heart.innerHTML = options[Math.floor(Math.random() * options.length)];
+
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = (20 + Math.random() * 30) + "px";
+
+        document.body.appendChild(heart);
+
+        setTimeout(() => {
+            heart.remove();
+        }, 6000);
+    }, 300);
 }
 </script>
 
