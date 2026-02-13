@@ -146,7 +146,7 @@
         <img id="slide" src="photo1.jpg">
     </div>
 
-    <div id="loveLetter">
+    <div id="loveLetter"></div>
         My dearest Pallavi,  
         <br><br>
         Every moment with you feels like a beautiful dream.  
@@ -160,7 +160,7 @@
         <br><br>
         Forever yours,  
         <br>
-        <b>YourName ❤️</b>
+        <b>Chaithanya ❤️</b>
     </div>
 </div>
 
@@ -169,9 +169,34 @@
 </audio>
 
 <script>
-const coupleText = "Pallavi ❤️ Chaithanya"; // replace YourName
-const photos = ["photo1.jpg", "photo2.jpg", "photo3.jpg"];
+const coupleText = "Pallavi ❤️ Chaithanya";
+
+const photos = [
+    "img_2023.jpg",
+    "us_at_beach.jpg",
+    "selfie1.jpg",
+    "date_night.jpg",
+    "college_pic.jpg",
+    "funny_face.jpg"
+];
+
 let current = 0;
+
+const letterText = `
+My dearest Pallavi,
+
+Every moment with you feels like a beautiful dream.
+Your smile brightens my darkest days,
+and your presence makes everything in life feel complete.
+
+I’m grateful for every laugh, every memory,
+and every second I get to spend with you.
+
+I love you more than words can ever express.
+
+Forever yours,
+Chaithanya ❤️
+`;
 
 function showLove() {
     document.getElementById("loveSong").play().catch(() => {});
@@ -182,9 +207,9 @@ function showLove() {
         document.getElementById("secretScreen").style.display = "flex";
         startSlideshow();
 
-        // Show love letter after 8 seconds
+        // Start typewriter after slideshow
         setTimeout(() => {
-            document.getElementById("loveLetter").style.display = "block";
+            typeLetter();
         }, 8000);
 
     }, 3000);
@@ -195,6 +220,24 @@ function startSlideshow() {
         current = (current + 1) % photos.length;
         document.getElementById("slide").src = photos[current];
     }, 2500);
+}
+
+function typeLetter() {
+    const letter = document.getElementById("loveLetter");
+    letter.style.display = "block";
+
+    let i = 0;
+    const speed = 40;
+
+    function type() {
+        if (i < letterText.length) {
+            letter.innerHTML += letterText.charAt(i) === "\n" ? "<br>" : letterText.charAt(i);
+            i++;
+            setTimeout(type, speed);
+        }
+    }
+
+    type();
 }
 
 function moveNo() {
